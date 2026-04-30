@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>José Pirir Romero</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --g3:#a0d888;--g4:#6bbf50;--g5:#3d9c2a;--g6:#2a7a1c;
+  --text:#1a3a0f;--text2:#2d5c1a;--muted:#527a40;--muted2:#7aaa60;
+  --shadow-g:rgba(60,140,30,0.22);--shadow-b:rgba(40,120,180,0.12);
+}
+
+body{
+  font-family:'Nunito Sans',sans-serif;
+  background:linear-gradient(145deg,#b8edb0 0%,#d8f5e8 20%,#c0e8f8 45%,#b0dff0 60%,#c8f0d8 80%,#d8f8e8 100%);
+  min-height:100vh;color:var(--text);overflow-x:hidden;
+}
+
+/* ── BG ── */
+.bg-wrap{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);}
+.orb1{width:800px;height:800px;background:radial-gradient(circle,rgba(140,220,120,0.45),rgba(180,240,160,0.2) 55%,transparent 80%);top:-300px;left:-250px;}
+.orb2{width:600px;height:600px;background:radial-gradient(circle,rgba(100,190,240,0.35),rgba(160,220,250,0.15) 55%,transparent 80%);top:-100px;right:-200px;}
+.orb3{width:700px;height:700px;background:radial-gradient(circle,rgba(120,230,190,0.35),rgba(160,245,210,0.15) 55%,transparent 80%);bottom:-250px;right:50px;}
+.orb4{width:400px;height:400px;background:radial-gradient(circle,rgba(160,230,140,0.3),transparent 70%);bottom:100px;left:-100px;}
+
+/* big bubbles */
+.bubble{position:absolute;border-radius:50%;}
+.bub1{width:180px;height:180px;top:6%;left:8%;}
+.bub2{width:100px;height:100px;top:18%;right:12%;}
+.bub3{width:130px;height:130px;top:48%;left:3%;}
+.bub4{width:65px;height:65px;top:35%;right:6%;}
+.bub5{width:220px;height:220px;bottom:4%;left:15%;}
+.bub6{width:55px;height:55px;bottom:28%;right:20%;}
+.bub7{width:80px;height:80px;bottom:15%;right:5%;}
+
+/* The real Frutiger Aero bubble uses multiple layered gradients */
+.bubble{
+  background:
+    radial-gradient(ellipse 55% 35% at 35% 22%, rgba(255,255,255,0.82) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 25% at 70% 75%, rgba(255,255,255,0.25) 0%, transparent 60%),
+    radial-gradient(circle at 50% 50%, rgba(200,245,220,0.18) 0%, rgba(160,230,255,0.12) 50%, transparent 80%);
+  border:1.5px solid rgba(255,255,255,0.55);
+  box-shadow:
+    inset 0 2px 8px rgba(255,255,255,0.6),
+    inset 0 -2px 6px rgba(140,220,180,0.15),
+    0 8px 24px rgba(80,180,120,0.1);
+}
+
+/* light rays */
+.ray{position:absolute;pointer-events:none;opacity:0.3;}
+.ray1{width:3px;height:400px;top:0;left:28%;background:linear-gradient(to bottom,rgba(255,255,255,0.7),transparent);transform:rotate(-12deg);transform-origin:top;}
+.ray2{width:2px;height:350px;top:0;left:52%;background:linear-gradient(to bottom,rgba(255,255,255,0.5),transparent);transform:rotate(6deg);transform-origin:top;}
+.ray3{width:2px;height:300px;top:0;right:22%;background:linear-gradient(to bottom,rgba(200,240,255,0.6),transparent);transform:rotate(-3deg);transform-origin:top;}
+
+/* ── GLASS MIXINS ── */
+
+/* Full Aero glass: deep blur + bright top-edge highlight + inner shine */
+.glass{
+  background:
+    linear-gradient(175deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.42) 40%, rgba(220,248,230,0.35) 100%);
+  backdrop-filter:blur(24px) saturate(180%) brightness(1.08);
+  -webkit-backdrop-filter:blur(24px) saturate(180%) brightness(1.08);
+  border-radius:22px;
+  border:1.5px solid rgba(255,255,255,0.88);
+  box-shadow:
+    /* outer ambient */
+    0 12px 40px rgba(60,140,50,0.18),
+    0 4px 12px rgba(60,140,50,0.10),
+    /* inner top shine — the "glass gloss" */
+    inset 0 1.5px 0 rgba(255,255,255,1),
+    inset 0 3px 18px rgba(255,255,255,0.55),
+    /* inner bottom tint */
+    inset 0 -2px 10px rgba(160,220,160,0.18),
+    /* subtle bottom outer shadow for depth */
+    0 2px 0 rgba(200,240,200,0.6);
+}
+
+/* Lighter variant for smaller cards */
+.glass-sm{
+  background:
+    linear-gradient(170deg, rgba(255,255,255,0.68) 0%, rgba(255,255,255,0.38) 45%, rgba(210,245,225,0.30) 100%);
+  backdrop-filter:blur(18px) saturate(160%) brightness(1.06);
+  -webkit-backdrop-filter:blur(18px) saturate(160%) brightness(1.06);
+  border-radius:18px;
+  border:1.5px solid rgba(255,255,255,0.82);
+  box-shadow:
+    0 8px 28px rgba(60,140,50,0.14),
+    0 2px 8px rgba(60,140,50,0.08),
+    inset 0 1.5px 0 rgba(255,255,255,1),
+    inset 0 3px 14px rgba(255,255,255,0.5),
+    inset 0 -2px 8px rgba(160,220,160,0.14),
+    0 1.5px 0 rgba(200,240,200,0.5);
+}
+
+/* Pill/chip glass */
+.glass-pill{
+  background:linear-gradient(170deg,rgba(255,255,255,0.82) 0%,rgba(240,252,244,0.6) 100%);
+  border:1px solid rgba(255,255,255,0.92);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,1),inset 0 2px 6px rgba(255,255,255,0.5),0 2px 8px rgba(80,160,50,0.1);
+}
+
+/* ── LAYOUT ── */
+main{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:0 1.5rem 5rem;}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 0 0;display:grid;grid-template-columns:1fr 210px;gap:1.5rem;align-items:start;}
+@media(max-width:680px){.hero{grid-template-columns:1fr}}
+
+.hero-card{padding:2.5rem 2.8rem;}
+
+.eyebrow{
+  font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--g5);
+  margin-bottom:1rem;display:flex;align-items:center;gap:8px;
+}
+.eyebrow::before{content:'';display:block;width:22px;height:2.5px;border-radius:2px;
+  background:linear-gradient(to right,var(--g5),var(--g3));}
+
+h1{
+  font-family:'Nunito',sans-serif;font-size:clamp(2rem,5vw,3.2rem);
+  font-weight:900;line-height:1.08;letter-spacing:-.03em;color:var(--text);
+}
+h1 em{font-style:normal;
+  background:linear-gradient(135deg,#3d9c2a,#6bbf50,#2a7a1c);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+.hero-role{
+  margin-top:.65rem;font-size:.95rem;font-weight:700;
+  font-family:'Nunito',sans-serif;color:var(--g5);letter-spacing:.01em;
+}
+.hero-bio{margin-top:.9rem;font-size:.92rem;color:var(--muted);line-height:1.65;max-width:500px;}
+
+.contacts{margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:7px;}
+.chip{
+  display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;
+  font-size:12px;font-weight:700;color:var(--text2);text-decoration:none;
+  transition:box-shadow .2s,transform .15s;
+}
+.chip:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(60,140,50,0.22),inset 0 1px 0 rgba(255,255,255,1);}
+.chip-dot{width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,var(--g3),var(--g5));flex-shrink:0;}
+
+/* ── PHOTO CARD ── */
+.photo-card{padding:1.8rem 1.4rem;text-align:center;display:flex;flex-direction:column;align-items:center;gap:.6rem;}
+
+.avatar-wrap{
+  width:110px;height:110px;border-radius:50%;
+  padding:3px;
+  background:linear-gradient(135deg,#a0d888,#6bbf50,#3d9c2a,#7ee8e2);
+  box-shadow:0 6px 24px rgba(80,160,50,0.35),0 0 0 3px rgba(255,255,255,0.8);
+  margin-bottom:.4rem;
+}
+.avatar-inner{
+  width:100%;height:100%;border-radius:50%;
+  background:linear-gradient(145deg,#c8f0b8,#a0d880,#5ab840);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Nunito',sans-serif;font-size:32px;font-weight:900;
+  color:#fff;text-shadow:0 2px 6px rgba(40,100,20,0.4);
+  border:2px solid rgba(255,255,255,0.7);
+  /* inner glass shine on avatar */
+  box-shadow:inset 0 2px 8px rgba(255,255,255,0.6),inset 0 -2px 6px rgba(60,140,30,0.2);
+  overflow:hidden;
+}
+.avatar-inner img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.photo-name{font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:var(--text);}
+.photo-sub{font-size:11px;color:var(--muted);font-weight:600;}
+.lang-orb{
+  margin-top:.3rem;padding:5px 16px;border-radius:100px;font-size:11px;font-weight:800;
+  background:linear-gradient(135deg,#6bbf50,#3d9c2a);color:#fff;
+  box-shadow:0 3px 10px rgba(80,160,50,0.35),inset 0 1px 0 rgba(255,255,255,0.4);
+  letter-spacing:.05em;
+}
+.photo-meta{font-size:11px;color:var(--muted);font-weight:600;margin-top:2px;}
+
+/* ── SECTION ── */
+section{margin-top:1.8rem;}
+.sec-label{
+  font-family:'Nunito',sans-serif;font-size:10px;font-weight:900;
+  letter-spacing:.25em;text-transform:uppercase;color:var(--g5);
+  margin-bottom:1.1rem;display:flex;align-items:center;gap:10px;
+}
+.sec-label::after{content:'';flex:1;height:1.5px;border-radius:2px;
+  background:linear-gradient(to right,rgba(80,160,50,0.3),transparent);}
+
+/* ── ACTIVE BANNER ── */
+.active-banner{
+  padding:1.4rem 2rem;display:flex;align-items:center;gap:1.4rem;flex-wrap:wrap;
+}
+.pulse-dot{
+  width:13px;height:13px;border-radius:50%;flex-shrink:0;
+  background:radial-gradient(circle at 35% 35%,#a0e870,#4db830);
+  box-shadow:0 0 0 3px rgba(107,191,80,0.25),0 2px 6px rgba(60,160,30,0.3);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%{box-shadow:0 0 0 3px rgba(107,191,80,.3),0 0 0 0 rgba(107,191,80,.4)}70%{box-shadow:0 0 0 3px rgba(107,191,80,.3),0 0 0 14px rgba(107,191,80,0)}100%{box-shadow:0 0 0 3px rgba(107,191,80,.3),0 0 0 0 rgba(107,191,80,0)}}
+.active-text .tiny{font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--g5);margin-bottom:3px;}
+.active-text .main{font-size:14px;font-weight:700;color:var(--text);}
+.active-pills{display:flex;gap:7px;flex-wrap:wrap;margin-left:auto;}
+
+/* ── PILL STYLES ── */
+.pill{display:inline-flex;align-items:center;padding:5px 13px;border-radius:100px;font-size:12px;font-weight:700;transition:transform .15s;}
+.pill:hover{transform:translateY(-1px);}
+
+.p-white{color:var(--text2);}
+.p-white,.chip{background:linear-gradient(170deg,rgba(255,255,255,0.85) 0%,rgba(240,252,244,0.65) 100%);border:1px solid rgba(255,255,255,0.92);box-shadow:inset 0 1.5px 0 rgba(255,255,255,1),inset 0 2px 8px rgba(255,255,255,0.45),0 2px 8px rgba(80,160,50,0.1);}
+
+.p-green{
+  background:linear-gradient(160deg,rgba(180,240,160,0.55) 0%,rgba(150,225,130,0.4) 100%);
+  border:1px solid rgba(180,240,160,0.7);color:var(--g6);
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,0.9),inset 0 2px 6px rgba(255,255,255,0.4),0 2px 8px rgba(80,180,50,0.12);
+}
+.p-sky{
+  background:linear-gradient(160deg,rgba(160,220,250,0.5) 0%,rgba(130,205,245,0.35) 100%);
+  border:1px solid rgba(160,220,250,0.65);color:#0f4d70;
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,0.9),inset 0 2px 6px rgba(255,255,255,0.4),0 2px 8px rgba(60,160,210,0.1);
+}
+.p-amber{
+  background:linear-gradient(160deg,rgba(255,230,140,0.5) 0%,rgba(245,215,100,0.35) 100%);
+  border:1px solid rgba(255,230,140,0.65);color:#5a3a00;
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,0.9),inset 0 2px 6px rgba(255,255,255,0.35),0 2px 8px rgba(180,140,30,0.1);
+}
+
+/* ── SKILLS GRID ── */
+.skills-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.1rem;}
+@media(max-width:600px){.skills-grid{grid-template-columns:1fr}}
+.skill-card{padding:1.35rem 1.55rem;}
+.skill-cat-name{
+  font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--g5);
+  margin-bottom:.85rem;display:flex;align-items:center;gap:8px;
+}
+.s-icon{font-size:15px;}
+.pills-wrap{display:flex;flex-wrap:wrap;gap:6px;}
+
+/* ── EXPERIENCE ── */
+.exp-list{display:flex;flex-direction:column;gap:1.1rem;}
+.exp-card{padding:1.5rem 1.8rem;}
+
+/* decorative top gloss stripe */
+.exp-card::before,.glass::before,.glass-sm::before{
+  content:'';display:block;
+  position:absolute;top:0;left:12%;right:12%;height:1px;
+  background:linear-gradient(to right,transparent,rgba(255,255,255,0.9) 40%,rgba(255,255,255,0.9) 60%,transparent);
+  border-radius:0 0 4px 4px;
+  pointer-events:none;
+}
+.exp-card,.glass,.glass-sm{position:relative;}
+
+.exp-header{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:.75rem;}
+.exp-title{font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;color:var(--text);}
+.exp-place{font-size:12px;font-weight:700;color:var(--g5);margin-top:2px;}
+.exp-date{
+  font-size:11px;font-weight:800;color:var(--muted2);white-space:nowrap;
+  padding:4px 13px;border-radius:100px;
+  background:linear-gradient(170deg,rgba(255,255,255,0.85),rgba(230,250,225,0.65));
+  border:1px solid rgba(255,255,255,0.9);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,1),0 2px 6px rgba(80,160,50,0.1);
+}
+.duties{display:flex;flex-direction:column;gap:5px;margin-top:.5rem;}
+.duty{font-size:12.5px;color:var(--muted);line-height:1.5;display:flex;gap:8px;align-items:flex-start;}
+.duty-dot{width:5px;height:5px;border-radius:50%;background:linear-gradient(135deg,var(--g3),var(--g5));margin-top:6px;flex-shrink:0;box-shadow:0 1px 3px rgba(80,160,50,0.3);}
+
+/* ── EDUCATION ── */
+.edu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+@media(max-width:700px){.edu-grid{grid-template-columns:1fr}}
+.edu-card{padding:1.4rem 1.3rem;text-align:center;}
+.edu-icon-wrap{
+  width:52px;height:52px;border-radius:16px;margin:0 auto .8rem;
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  background:linear-gradient(145deg,rgba(255,255,255,0.8),rgba(210,245,215,0.6));
+  border:1.5px solid rgba(255,255,255,0.9);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,1),inset 0 3px 10px rgba(255,255,255,0.5),0 4px 14px rgba(80,160,50,0.14);
+}
+.edu-degree{font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:var(--text);line-height:1.3;margin-bottom:5px;}
+.edu-school{font-size:11px;color:var(--muted);font-weight:600;margin-bottom:7px;}
+.edu-year{
+  font-size:11px;font-weight:800;padding:3px 12px;border-radius:100px;display:inline-block;
+  background:linear-gradient(135deg,#a0d888,#6bbf50);color:#fff;
+  box-shadow:0 2px 8px rgba(80,160,50,0.28),inset 0 1px 0 rgba(255,255,255,0.4);
+}
+
+/* ── PROJECTS ── */
+.proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
+@media(max-width:600px){.proj-grid{grid-template-columns:1fr}}
+.proj-card{
+  padding:1.35rem 1.5rem;text-decoration:none;display:block;
+  transition:transform .2s,box-shadow .2s;
+}
+.proj-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 18px 48px rgba(60,140,50,0.22),0 4px 12px rgba(60,140,50,0.12),
+    inset 0 1.5px 0 rgba(255,255,255,1),inset 0 3px 18px rgba(255,255,255,0.55);
+}
+.proj-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;}
+.proj-name{font-family:'Nunito',sans-serif;font-size:13.5px;font-weight:800;color:var(--text);}
+.lang-tag{
+  font-size:10px;font-weight:800;padding:3px 11px;border-radius:100px;letter-spacing:.04em;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.8),0 2px 6px rgba(0,0,0,0.08);
+}
+.lt-go{background:linear-gradient(135deg,#c0f0e8,#90e0d8);color:#0a4838;border:1px solid rgba(120,210,200,0.5);}
+.lt-cs{background:linear-gradient(135deg,#d0c8ff,#b0a8f8);color:#1e1060;border:1px solid rgba(160,150,240,0.5);}
+.lt-py{background:linear-gradient(135deg,#fff0b0,#ffe070);color:#503000;border:1px solid rgba(230,200,60,0.5);}
+.lt-asm{background:linear-gradient(135deg,#ffd0c8,#ffb0a0);color:#500808;border:1px solid rgba(240,160,140,0.5);}
+.lt-ft{background:linear-gradient(135deg,#c8f0a8,#a8e080);color:#1c3a08;border:1px solid rgba(150,210,110,0.5);}
+.proj-desc{font-size:12px;color:var(--muted);line-height:1.55;}
+
+/* ── CERTS ── */
+.cert-row{display:flex;gap:1rem;flex-wrap:wrap;}
+.cert-card{flex:1;min-width:175px;padding:1.2rem 1.4rem;display:flex;gap:12px;align-items:center;}
+.cert-icon-wrap{
+  width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+  background:linear-gradient(145deg,rgba(255,255,255,0.85),rgba(210,245,220,0.6));
+  border:1.5px solid rgba(255,255,255,0.9);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,1),inset 0 2px 8px rgba(255,255,255,0.5),0 3px 10px rgba(80,160,50,0.12);
+}
+.cert-title{font-size:12.5px;font-weight:700;color:var(--text);line-height:1.35;}
+.cert-year{font-size:11px;color:var(--muted2);font-weight:700;margin-top:2px;}
+
+/* ── FOOTER ── */
+footer{
+  margin-top:2.5rem;text-align:center;font-size:12px;font-weight:700;color:var(--muted);
+  padding:1.4rem 2rem;
+  background:linear-gradient(170deg,rgba(255,255,255,0.7) 0%,rgba(240,252,244,0.5) 100%);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-radius:18px;
+  border:1.5px solid rgba(255,255,255,0.88);
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,1),inset 0 3px 14px rgba(255,255,255,0.5),0 6px 20px rgba(60,140,50,0.12);
+}
+
+/* ── FADE IN ── */
+.fade-up{opacity:0;transform:translateY(18px);animation:fu .65s ease forwards;}
+@keyframes fu{to{opacity:1;transform:none}}
+.d1{animation-delay:.04s}.d2{animation-delay:.1s}.d3{animation-delay:.17s}
+.d4{animation-delay:.24s}.d5{animation-delay:.31s}.d6{animation-delay:.38s}.d7{animation-delay:.45s}
+</style>
+</head>
+<body>
+
+<div class="bg-wrap">
+  <div class="orb orb1"></div><div class="orb orb2"></div>
+  <div class="orb orb3"></div><div class="orb orb4"></div>
+  <div class="bubble bub1"></div><div class="bubble bub2"></div><div class="bubble bub3"></div>
+  <div class="bubble bub4"></div><div class="bubble bub5"></div><div class="bubble bub6"></div>
+  <div class="bubble bub7"></div>
+  <div class="ray ray1"></div><div class="ray ray2"></div><div class="ray ray3"></div>
+</div>
+
+<main>
+
+  <!-- HERO -->
+  <div class="hero fade-up d1">
+    <div class="glass hero-card">
+      <div class="eyebrow">Ingeniería en Ciencias y Sistemas · USAC</div>
+      <h1>José Sebastian<br><em>Pirir</em> Romero</h1>
+      <div class="hero-role">Desarrollador de Software · 23 años · Guatemala</div>
+      <p class="hero-bio">Estudiante de 7mo semestre especializado en backend distribuido, DevOps y arquitecturas cloud-native. Con experiencia práctica en entidades estatales y enfoque en sistemas de alto rendimiento.</p>
+      <div class="contacts">
+        <a class="chip" href="mailto:josepirirromero@gmail.com"><span class="chip-dot"></span>josepirirromero@gmail.com</a>
+        <a class="chip" href="tel:+50247162533"><span class="chip-dot"></span>+502 4716-2533</a>
+        <a class="chip" href="https://github.com/JosePirir" target="_blank"><span class="chip-dot"></span>github.com/JosePirir</a>
+      </div>
+    </div>
+
+    <div class="glass photo-card">
+      <div class="avatar-wrap">
+        <div class="avatar-inner" id="avatarInner"><img src="image.png" alt="JP"></div>
+      </div>
+      <div class="photo-name">José S. Pirir R.</div>
+      <div class="photo-sub">Guatemala, GT</div>
+      <span class="lang-orb">Inglés B2</span>
+      <div class="photo-meta">Soltero · 23 años</div>
+    </div>
+  </div>
+
+  <!-- ACTUALMENTE -->
+  <section class="fade-up d2">
+    <div class="sec-label">Trabajando actualmente</div>
+    <div class="glass active-banner">
+      <div class="pulse-dot"></div>
+      <div class="active-text">
+        <div class="tiny">En curso</div>
+        <div class="main">Sistemas distribuidos con mensajería asíncrona y observabilidad</div>
+      </div>
+      <div class="active-pills">
+        <span class="pill p-green">RabbitMQ</span>
+        <span class="pill p-green">Grafana</span>
+        <span class="pill p-green">Go</span>
+        <span class="pill p-sky">Kubernetes</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="fade-up d3">
+    <div class="sec-label">Formación técnica</div>
+    <div class="skills-grid">
+      <div class="glass-sm skill-card">
+        <div class="skill-cat-name"><span class="s-icon">🖥</span>Frontend</div>
+        <div class="pills-wrap">
+          <span class="pill p-white">Angular</span><span class="pill p-white">React</span>
+          <span class="pill p-white">HTML</span><span class="pill p-white">CSS</span><span class="pill p-white">Bootstrap</span>
+        </div>
+      </div>
+      <div class="glass-sm skill-card">
+        <div class="skill-cat-name"><span class="s-icon">⚙️</span>Backend &amp; Lenguajes</div>
+        <div class="pills-wrap">
+          <span class="pill p-green">Go</span><span class="pill p-white">Python</span><span class="pill p-white">Java</span>
+          <span class="pill p-white">JavaScript</span><span class="pill p-white">TypeScript</span>
+          <span class="pill p-white">C#</span><span class="pill p-white">Fortran</span><span class="pill p-white">Assembly</span>
+        </div>
+      </div>
+      <div class="glass-sm skill-card">
+        <div class="skill-cat-name"><span class="s-icon">☁️</span>Cloud &amp; DevOps</div>
+        <div class="pills-wrap">
+          <span class="pill p-sky">Docker</span><span class="pill p-sky">Kubernetes</span>
+          <span class="pill p-sky">GCP</span><span class="pill p-sky">AWS</span>
+          <span class="pill p-sky">Linux</span><span class="pill p-sky">RabbitMQ</span>
+        </div>
+      </div>
+      <div class="glass-sm skill-card">
+        <div class="skill-cat-name"><span class="s-icon">🗄</span>Bases de datos</div>
+        <div class="pills-wrap">
+          <span class="pill p-amber">MySQL</span><span class="pill p-amber">MongoDB</span>
+          <span class="pill p-amber">Redis</span><span class="pill p-amber">Grafana</span>
+          <span class="pill p-white">SQL Relacional</span><span class="pill p-white">NoSQL</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCIA -->
+  <section class="fade-up d4">
+    <div class="sec-label">Experiencia laboral</div>
+    <div class="exp-list">
+      <div class="glass exp-card">
+        <div class="exp-header">
+          <div>
+            <div class="exp-title">Desarrollador Web</div>
+            <div class="exp-place">Registro y Estadística — USAC</div>
+          </div>
+          <div class="exp-date">2025</div>
+        </div>
+        <div class="duties">
+          <div class="duty"><span class="duty-dot"></span>Desarrollo y mantenimiento de aplicaciones web institucionales.</div>
+          <div class="duty"><span class="duty-dot"></span>Corrección y depuración de código en producción.</div>
+          <div class="duty"><span class="duty-dot"></span>Gestión de repositorios y trabajo con contenedores Docker.</div>
+        </div>
+      </div>
+      <div class="glass exp-card">
+        <div class="exp-header">
+          <div>
+            <div class="exp-title">Prácticas Técnicas</div>
+            <div class="exp-place">CONRED — Coordinadora Nacional para la Reducción de Desastres</div>
+          </div>
+          <div class="exp-date">2022</div>
+        </div>
+        <div class="duties">
+          <div class="duty"><span class="duty-dot"></span>Servicio técnico y soporte a equipos de cómputo.</div>
+          <div class="duty"><span class="duty-dot"></span>Actualización y mantenimiento de software institucional.</div>
+          <div class="duty"><span class="duty-dot"></span>Atención al cliente interno e inventario de dispositivos electrónicos.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROYECTOS -->
+  <section class="fade-up d5">
+    <div class="sec-label">Proyectos académicos destacados</div>
+    <div class="proj-grid">
+      <a class="glass-sm proj-card" href="https://github.com/JosePirir/MIA_2S2025_P2_202300335" target="_blank">
+        <div class="proj-top"><span class="proj-name">MIA — Sistema de Archivos</span><span class="lang-tag lt-go">Go</span></div>
+        <p class="proj-desc">Simulación de sistema de archivos y estructuras de almacenamiento. Manejo e Implementación de Archivos.</p>
+      </a>
+      <a class="glass-sm proj-card" href="https://github.com/JosePirir/-EDD-1S2025_202300335" target="_blank">
+        <div class="proj-top"><span class="proj-name">EDD — Estructuras de Datos</span><span class="lang-tag lt-cs">C#</span></div>
+        <p class="proj-desc">Implementación de estructuras lineales y no lineales con aplicaciones prácticas en C#.</p>
+      </a>
+      <a class="glass-sm proj-card" href="https://github.com/JosePirir/Proyecto2-Arqui-B-2023300335" target="_blank">
+        <div class="proj-top"><span class="proj-name">Arquitectura de Computadoras</span><span class="lang-tag lt-asm">Assembly</span></div>
+        <p class="proj-desc">Programación a bajo nivel en ensamblador, manejo de registros y operaciones de memoria.</p>
+      </a>
+      <a class="glass-sm proj-card" href="https://github.com/JosePirir/Proyecto2-LFP-20230035" target="_blank">
+        <div class="proj-top"><span class="proj-name">Lenguajes Formales</span><span class="lang-tag lt-ft">Fortran</span></div>
+        <p class="proj-desc">Análisis léxico y procesamiento de cadenas implementado en Fortran.</p>
+      </a>
+      <a class="glass-sm proj-card" href="https://github.com/C-arl-os/OLC1_VJ2025_G-28" target="_blank">
+        <div class="proj-top"><span class="proj-name">OLC1 — Compiladores</span><span class="lang-tag lt-py">Python</span></div>
+        <p class="proj-desc">Proyecto grupal de análisis léxico y sintáctico. Organización de Lenguajes y Compiladores.</p>
+      </a>
+      <a class="glass-sm proj-card" href="https://github.com/JosePirir/IPC2-Proyecto3-202300335" target="_blank">
+        <div class="proj-top"><span class="proj-name">IPC2 — Proyecto Final</span><span class="lang-tag lt-py">Python</span></div>
+        <p class="proj-desc">Interfaces gráficas y estructuras de datos. Introducción a la Programación y Computación 2.</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- EDUCACIÓN -->
+  <section class="fade-up d6">
+    <div class="sec-label">Formación académica</div>
+    <div class="edu-grid">
+      <div class="glass-sm edu-card">
+        <div class="edu-icon-wrap">🎓</div>
+        <div class="edu-degree">Ingeniería en Ciencias y Sistemas</div>
+        <div class="edu-school">Universidad de San Carlos de Guatemala</div>
+        <span class="edu-year">2023 – 2026 · 7mo Sem.</span>
+      </div>
+      <div class="glass-sm edu-card">
+        <div class="edu-icon-wrap">💻</div>
+        <div class="edu-degree">Perito en Computación</div>
+        <div class="edu-school">Centro Educativo Técnico Laboral Kinal</div>
+        <span class="edu-year">2019 – 2021</span>
+      </div>
+      <div class="glass-sm edu-card">
+        <div class="edu-icon-wrap">📚</div>
+        <div class="edu-degree">Educación Básica</div>
+        <div class="edu-school">Centro Educativo Técnico Laboral Kinal</div>
+        <span class="edu-year">2016 – 2018</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTS -->
+  <section class="fade-up d7">
+    <div class="sec-label">Diplomas y certificaciones</div>
+    <div class="cert-row">
+      <div class="glass-sm cert-card">
+        <div class="cert-icon-wrap">🌐</div>
+        <div><div class="cert-title">MUNIJOVEN English Training Program</div><div class="cert-year">2022</div></div>
+      </div>
+      <div class="glass-sm cert-card">
+        <div class="cert-icon-wrap">⚡</div>
+        <div><div class="cert-title">JavaScript Algorithms &amp; Data Structures</div><div class="cert-year">freeCodeCamp · 2022</div></div>
+      </div>
+      <div class="glass-sm cert-card">
+        <div class="cert-icon-wrap">🎨</div>
+        <div><div class="cert-title">Responsive Web Design</div><div class="cert-year">freeCodeCamp · 2022</div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="fade-up">
+    josepirirromero@gmail.com &nbsp;·&nbsp; +502 4716-2533 &nbsp;·&nbsp; github.com/JosePirir &nbsp;·&nbsp; Guatemala, GT
+  </footer>
+
+</main>
+
+</body>
+</html>
